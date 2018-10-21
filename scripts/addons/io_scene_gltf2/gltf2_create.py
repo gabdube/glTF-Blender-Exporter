@@ -339,10 +339,11 @@ def create_accessor(
 
 def create_image_file(context, blender_image, dst_path, file_format):
     """
-    Creates JPEG or PNG file from a given Blender image.
+    Creates JPEG, PNG or raw binary file from a given Blender image.
     """
 
-    if file_format == blender_image.file_format:
+    print_console('INFO', str(file_format))
+    if file_format == blender_image.file_format or file_format == "UNKNOWN":
         # Copy source image to destination, keeping original format.
 
         src_path = bpy.path.abspath(blender_image.filepath, library=blender_image.library)
@@ -373,8 +374,10 @@ def create_image_data(context, export_settings, blender_image, file_format):
 
     if file_format == 'PNG':
         return _create_png_data(context, export_settings, blender_image)
-    else:
+    elif file_format == 'JPEG':
         return _create_jpg_data(context, export_settings, blender_image)
+    else:
+        return _read_raw_data(context, export_settings, blender_image)
 
 
 def _create_jpg_data(context, export_settings, blender_image):
@@ -420,6 +423,10 @@ def _create_png_data(context, export_settings, blender_image):
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
 
+def _read_raw_data(context, export_settings, blender_image):
+    uri = get_image_uri(export_settings, blender_image)
+    path = export_settings['gltf_filedirectory'] + uri
+    return open(path, 'rb').read()
 
 def create_custom_property(blender_element):
     """

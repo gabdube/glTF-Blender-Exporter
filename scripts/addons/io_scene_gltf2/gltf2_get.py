@@ -364,7 +364,11 @@ def get_image_uri(export_settings, blender_image):
     """
 
     file_format = get_image_format(export_settings, blender_image)
-    extension = '.jpg' if file_format == 'JPEG' else '.png'
+    extension = ''
+    if file_format == 'JPEG':
+        extension = ".jpg"
+    elif file_format == "PNG":
+        extension = ".png"
 
     return get_image_name(blender_image) + extension
 
@@ -377,9 +381,7 @@ def get_image_format(export_settings, blender_image):
     if blender_image.file_format in ['PNG', 'JPEG']:
         return blender_image.file_format
 
-    use_alpha = export_settings['filtered_images_use_alpha'].get(blender_image.name)
-
-    return 'PNG' if use_alpha else 'JPEG'
+    return 'UNKNOWN'
 
 
 def get_image_index(glTF, image):

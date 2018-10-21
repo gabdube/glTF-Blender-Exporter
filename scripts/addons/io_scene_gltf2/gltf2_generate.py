@@ -2084,7 +2084,11 @@ def generate_images(operator,
         image = { 'name': get_image_name(blender_image) }
 
         file_format = get_image_format(export_settings, blender_image)
-        mime_type = 'image/jpeg' if file_format == 'JPEG' else 'image/png'
+        mime_type = 'image/jpeg' 
+        if file_format == 'PNG':
+            mime_type = 'image/png'
+        elif file_format == 'UNKNOWN':
+            mime_type = 'application/octet-stream'
 
         #
 

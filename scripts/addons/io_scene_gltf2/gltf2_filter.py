@@ -193,7 +193,8 @@ def filter_apply(export_settings):
                     if blender_material_slot.material not in filtered_materials:
                         filtered_materials.append(blender_material_slot.material)
                     
-    export_settings['filtered_materials'] = filtered_materials                
+    export_settings['filtered_materials'] = filtered_materials       
+    print_console('INFO', str(filtered_materials))              
 
     #
 
@@ -205,7 +206,7 @@ def filter_apply(export_settings):
         if blender_material.node_tree and blender_material.use_nodes:
             for blender_node in blender_material.node_tree.nodes:
                 
-                if isinstance(blender_node, bpy.types.ShaderNodeTexImage) and blender_node.image is not None and blender_node.image.users != 0 and blender_node.image.size[0] > 0 and blender_node.image.size[1] > 0 and blender_node not in filtered_textures:
+                if isinstance(blender_node, bpy.types.ShaderNodeTexImage) and blender_node.image is not None and blender_node.image.users != 0 and blender_node not in filtered_textures:
                     add_node = False
                     for blender_socket in blender_node.outputs:
                         if blender_socket.is_linked:
@@ -246,7 +247,8 @@ def filter_apply(export_settings):
                                 filtered_textures.append(blender_texture_slot)
                                 temp_filtered_texture_names.append(blender_texture_slot.name)
  
-    export_settings['filtered_textures'] = filtered_textures                
+    export_settings['filtered_textures'] = filtered_textures      
+    print_console('INFO', str(filtered_textures))          
 
     #
 
@@ -256,7 +258,7 @@ def filter_apply(export_settings):
     for blender_texture in filtered_textures:
         
         if isinstance(blender_texture, bpy.types.ShaderNodeTexImage):
-            if blender_texture.image is not None and blender_texture.image not in filtered_images and blender_texture.image.users != 0 and blender_texture.image.size[0] > 0 and blender_texture.image.size[1] > 0:
+            if blender_texture.image is not None and blender_texture.image not in filtered_images and blender_texture.image.users != 0:
                 filtered_images.append(blender_texture.image)
                 alpha_socket = blender_texture.outputs.get('Alpha')
                 if alpha_socket is not None and alpha_socket.is_linked:
@@ -270,6 +272,7 @@ def filter_apply(export_settings):
                     
     export_settings['filtered_images'] = filtered_images
     export_settings['filtered_images_use_alpha'] = filtered_images_use_alpha
+    print_console('INFO', str(filtered_images))
     
     #
     #
