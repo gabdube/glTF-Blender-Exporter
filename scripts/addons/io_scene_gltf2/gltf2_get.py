@@ -153,7 +153,7 @@ def get_texture_index_by_node_group(export_settings, glTF, name, shader_node_gro
     if not isinstance(from_node, bpy.types.ShaderNodeTexImage):
         return -1
 
-    if from_node.image is None or from_node.image.size[0] == 0 or from_node.image.size[1] == 0:
+    if from_node.image is None:
         return -1
 
     return get_texture_index_by_image(glTF, from_node.image)
@@ -364,7 +364,7 @@ def get_image_uri(export_settings, blender_image):
     """
 
     file_format = get_image_format(export_settings, blender_image)
-    extension = ''
+    extension = '.ktx'
     if file_format == 'JPEG':
         extension = ".jpg"
     elif file_format == "PNG":
